@@ -49,16 +49,36 @@ include_directories(
     ${Boost_INCLUDE_DIRS}
     )
 
-add_executable(robot_pose_ekf 
-                       src/odom_estimation.cpp 
-                       src/nonlinearanalyticconditionalgaussianodo.cpp 
+add_executable(robot_pose_ekf
+                       src/odom_estimation.cpp
+                       src/nonlinearanalyticconditionalgaussianodo.cpp
                        src/odom_estimation_node.cpp)
+
 target_link_libraries(robot_pose_ekf
     ${catkin_LIBRARIES}
     ${Boost_LIBRARIES}
     ${BFL_LIBRARIES}
     )
+
 add_dependencies(robot_pose_ekf ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+
+add_executable(ekf_hw src/gladiator_imu.cpp)
+
+target_link_libraries(ekf_hw
+    ${catkin_LIBRARIES}
+    ${Boost_LIBRARIES}
+    ${BFL_LIBRARIES}
+    )
+
+add_executable(odom_combined_listener src/odom_combined_sub.cpp)
+
+target_link_libraries(odom_combined_listener
+    ${catkin_LIBRARIES}
+    ${Boost_LIBRARIES}
+    ${BFL_LIBRARIES}
+    )
+
+add_dependencies(ekf_hw ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 install(
     TARGETS
